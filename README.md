@@ -1,3 +1,7 @@
+# RDF Modelizer
+
+<img src = "https://i.imgur.com/pGutK5k.png"/>
+
 # SPARQL QUERIES
 
 
