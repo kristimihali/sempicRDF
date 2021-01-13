@@ -1,0 +1,210 @@
+{
+	"info": {
+		"_postman_id": "3fd7c329-4c8c-407c-9aa4-cf3884a5a9e4",
+		"name": "Web Sémentique",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Web Sémentiques",
+			"item": [
+				{
+					"name": "Ajoutation un depicts",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\"http://miashs.univ-grenoble-alpes.fr/depicts/1\"]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/data/photos/2/depicts",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"data",
+								"photos",
+								"2",
+								"depicts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ajoutation un takenIn",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\"http://miashs.univ-grenoble-alpes.fr/places/1\"]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/data/photos/2/takenIn",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"data",
+								"photos",
+								"2",
+								"takenIn"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ajoutation un takenBy",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\"http://miashs.univ-grenoble-alpes.fr/depicts/2\"]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/data/photos/2/takenBy",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"data",
+								"photos",
+								"2",
+								"takenBy"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recherche un photo par class donnée",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/data/photos/search?type=depictent&className=Cat",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"data",
+								"photos",
+								"search"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "depictent"
+								},
+								{
+									"key": "className",
+									"value": "Cat"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recherche des photos selfies",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/data/photos/search?type=selfies",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"data",
+								"photos",
+								"search"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "selfies"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recherche des photos qui depictent une certaine restriction de propriété",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/data/photos/search?type=restriction",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"data",
+								"photos",
+								"search"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "restriction"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
