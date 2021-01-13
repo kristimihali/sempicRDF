@@ -6,13 +6,18 @@
 package fr.uga.miashs.sempic.rdf;
 
 import fr.uga.miashs.sempic.model.rdf.SempicOnto;
+import org.apache.jena.atlas.json.JsonArray;
+import org.apache.jena.base.Sys;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.shared.PrefixMapping;
+import org.apache.jena.sparql.ARQException;
 import org.apache.jena.vocabulary.RDFS;
 
 import javax.inject.Singleton;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Classe offrant les services de base de l'appli sempic : créer une photo,
@@ -33,13 +38,14 @@ public class BasicSempicRDFStore extends RDFStore {
         prefixes.setNsPrefix("sempic", SempicOnto.NS);
     }
     
-    public Resource createPhoto(long photoId, long albumId, long ownerId) {
+    public Resource createPhoto(long photoId, long albumId, long ownerId, String title) {
         // create an empty RDF graph
         Model m = ModelFactory.createDefaultModel();
         // create an instance of Photo in Model m
-        Resource pRes = m.createResource(Namespaces.getPhotoUri(photoId), SempicOnto.Photo);
+        Resource pRes = m.createResource(Namespaces.getNsUri(photoId, "photo"), SempicOnto.Photo);
 
         pRes.addLiteral(SempicOnto.albumId, albumId);
+        pRes.addLiteral(RDFS.label, title);
         pRes.addLiteral(SempicOnto.ownerId, ownerId);
 
         saveModel(m);
@@ -49,7 +55,7 @@ public class BasicSempicRDFStore extends RDFStore {
 
     public void deletePhoto(long photoId) {
         // create an instance of Photo in Model m
-        Resource pRes = ResourceFactory.createResource(Namespaces.getPhotoUri(photoId));
+        Resource pRes = ResourceFactory.createResource(Namespaces.getNsUri(photoId, "photo"));
         deleteResource(pRes);
     }
 
@@ -62,7 +68,7 @@ public class BasicSempicRDFStore extends RDFStore {
      * @return
      */
     public Resource readPhoto(long photoId) {
-        String pUri = Namespaces.getPhotoUri(photoId);
+        String pUri = Namespaces.getNsUri(photoId, "photo");
         ParameterizedSparqlString pss = new ParameterizedSparqlString(prefixes);
         pss.setBaseUri(Namespaces.photoNS);
         
@@ -81,7 +87,7 @@ public class BasicSempicRDFStore extends RDFStore {
                  + "}");
         pss.setIri("photo", pUri);
         
-        Model m = cnx.queryConstruct(pss.asQuery());
+        Model m =  cnx.queryConstruct(pss.asQuery());
         return m.getResource(pUri);
     }
 
@@ -204,8 +210,69 @@ public class BasicSempicRDFStore extends RDFStore {
         query += "FILTER (ISIRI(?s)) .";
         query += "}";
         //System.out.println(query);
-        Model m = cnx.queryConstruct(query);
+        Model m =  cnx.queryConstruct(query);
         List<Resource> res = m.listSubjects().toList();
         return res;
     }
+
+    public void updatePhotoAlbum(long photoId, long albumId, long ownerId, String title) {
+        deletePhoto(photoId);
+        createPhoto(photoId, albumId, ownerId, title);
+    }
+
+    public JsonArray searchPhotos(String type, String className) {
+
+        JsonArray results = new JsonArray();
+        Logger lgr = Logger.getLogger(this.getClass().getName());
+        ParameterizedSparqlString pss = new ParameterizedSparqlString(prefixes);
+
+        switch(type) {
+            case "depictent":
+                if (className != null) {
+                    pss.setCommandText(
+                            "SELECT DISTINCT ?s" +
+                            "{ " +
+                            "  ?s a sempic:Photo ;" +
+                            "       sempic:depicts [ a sempic:"+className+"]" +
+                            "}");
+                }
+                break;
+            case "selfies":
+                pss.setCommandText(
+                        "SELECT * " +
+                        "{ " +
+                        "  ?photo a sempic:Photo;" +
+                        "  sempic:who [ sempic:owner ?auteur ] ." +
+                        "}");
+                break;
+            case "restriction":
+                pss.setCommandText(
+                        "SELECT ?p ?o" +
+                        "{" +
+                            "?p sempic:who ?o ." +
+                        "}");
+                break;
+        }
+
+        try {
+            QueryExecution qe = cnx.query(pss.asQuery());
+            ResultSet rs = qe.execSelect();
+
+            while (rs.hasNext()) {
+                QuerySolution qs = rs.next();
+                results.add(qs.getResource("s").toString());
+            }
+
+            cnx.close();
+        } catch (QueryException e) {
+            lgr.log(Level.WARNING, e.getMessage());
+        } catch (ARQException e) {
+            lgr.log(Level.WARNING, e.getMessage());
+        } catch (NullPointerException e) {
+            lgr.log(Level.WARNING, e.getMessage());
+        }
+        return results;
+    }
+
+
 }
