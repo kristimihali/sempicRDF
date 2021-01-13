@@ -1,0 +1,467 @@
+@prefix : <http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl> .
+
+<http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl> rdf:type owl:Ontology .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#depicts
+:depicts rdf:type owl:ObjectProperty ;
+         rdfs:subPropertyOf owl:topObjectProperty ;
+         rdfs:domain :Photo ;
+         rdfs:range :Depiction ;
+         rdfs:label "depicts" .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#hasBrother
+:hasBrother rdf:type owl:ObjectProperty ;
+            rdfs:subPropertyOf :hasSibling ;
+            rdfs:domain :Male .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#hasFather
+:hasFather rdf:type owl:ObjectProperty ;
+           rdfs:subPropertyOf :hasParent ;
+           rdf:type owl:FunctionalProperty ;
+           rdfs:domain :Male ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasParent ;
+                         owl:maxQualifiedCardinality "2"^^xsd:nonNegativeInteger ;
+                         owl:onClass :Person
+                       ] ;
+           owl:propertyDisjointWith :hasMother .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#hasMother
+:hasMother rdf:type owl:ObjectProperty ;
+           rdfs:subPropertyOf :hasParent ;
+           rdfs:domain :Female .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#hasParent
+:hasParent rdf:type owl:ObjectProperty ,
+                    owl:FunctionalProperty ,
+                    owl:AsymmetricProperty ,
+                    owl:TransitiveProperty ;
+           rdfs:domain :Person ;
+           rdfs:range :Person ;
+           owl:propertyDisjointWith :isParentOf .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#hasSibling
+:hasSibling rdf:type owl:ObjectProperty ;
+            rdfs:subPropertyOf owl:topObjectProperty ;
+            rdf:type owl:SymmetricProperty ,
+                     owl:TransitiveProperty ;
+            rdfs:domain :Person ;
+            owl:propertyDisjointWith :isSilingOf .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#hasSister
+:hasSister rdf:type owl:ObjectProperty ;
+           rdfs:subPropertyOf :hasSibling ;
+           rdfs:domain :Female .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#isDomestic
+:isDomestic rdf:type owl:ObjectProperty ;
+            rdfs:domain :Animal ;
+            rdfs:range :Animal ;
+            owl:propertyDisjointWith :isWild .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#isFatherOf
+:isFatherOf rdf:type owl:ObjectProperty ;
+            rdfs:subPropertyOf :isParentOf ;
+            rdf:type owl:FunctionalProperty ,
+                     owl:AsymmetricProperty .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#isMotherOf
+:isMotherOf rdf:type owl:ObjectProperty ;
+            rdfs:subPropertyOf :isParentOf ;
+            rdf:type owl:FunctionalProperty ,
+                     owl:AsymmetricProperty .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#isParentOf
+:isParentOf rdf:type owl:ObjectProperty ;
+            rdfs:subPropertyOf owl:topObjectProperty ;
+            rdf:type owl:AsymmetricProperty ,
+                     owl:TransitiveProperty .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#isSilingOf
+:isSilingOf rdf:type owl:ObjectProperty ,
+                     owl:SymmetricProperty ,
+                     owl:TransitiveProperty .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#isWild
+:isWild rdf:type owl:ObjectProperty ;
+        rdfs:domain :Animal ;
+        rdfs:range :Animal .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#knows
+:knows rdf:type owl:ObjectProperty ,
+                owl:ReflexiveProperty .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#owns
+:owns rdf:type owl:ObjectProperty ;
+      rdfs:subPropertyOf owl:topObjectProperty ;
+      rdfs:domain :Person ;
+      rdfs:label "possède" .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#takenBy
+:takenBy rdf:type owl:ObjectProperty ;
+         rdfs:subPropertyOf owl:topObjectProperty ;
+         rdf:type owl:FunctionalProperty ;
+         rdfs:domain :Photo ;
+         rdfs:range :Person ;
+         rdfs:label "taken by" .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#takenIn
+:takenIn rdf:type owl:ObjectProperty ;
+         rdfs:subPropertyOf owl:topObjectProperty ;
+         rdf:type owl:FunctionalProperty ;
+         rdfs:domain :Photo ;
+         rdfs:range :Place ;
+         rdfs:label "taken in" .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#what
+:what rdf:type owl:ObjectProperty ;
+      rdfs:domain :Photo ;
+      rdfs:range :Animal ,
+                 :Person .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#when
+:when rdf:type owl:ObjectProperty ;
+      rdfs:domain :Photo .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#where
+:where rdf:type owl:ObjectProperty ;
+       rdfs:subPropertyOf owl:topObjectProperty ;
+       rdfs:domain :Photo ;
+       rdfs:range :Place .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#who
+:who rdf:type owl:ObjectProperty .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#why
+:why rdf:type owl:ObjectProperty ;
+     rdfs:domain :Photo ;
+     rdfs:range :Reason .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#albumId
+:albumId rdf:type owl:DatatypeProperty ;
+         rdfs:subPropertyOf owl:topDataProperty ;
+         rdf:type owl:FunctionalProperty ;
+         rdfs:domain :Photo ;
+         rdfs:label "in album" .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#ownerId
+:ownerId rdf:type owl:DatatypeProperty ;
+         rdfs:subPropertyOf owl:topDataProperty ;
+         rdf:type owl:FunctionalProperty ;
+         rdfs:domain :Animal ,
+                     :Photo ,
+                     :Place ;
+         rdfs:range xsd:string ;
+         rdfs:label "has owner" .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#wasBornOn
+:wasBornOn rdf:type owl:DatatypeProperty ;
+           rdfs:domain :Person ;
+           rdfs:range xsd:string .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#wasTakenOn
+:wasTakenOn rdf:type owl:DatatypeProperty ;
+            rdfs:domain :Photo ;
+            rdfs:range xsd:string .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Animal
+:Animal rdf:type owl:Class ;
+        rdfs:subClassOf :Depiction ;
+        owl:disjointWith :Person ,
+                         :Place ;
+        rdfs:label "Animal" ,
+                   "Animal"@fr .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Anniversary
+:Anniversary rdf:type owl:Class ;
+             owl:equivalentClass :Birthday ;
+             rdfs:subClassOf :Reason ;
+             owl:disjointWith :Funeral .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Beach
+:Beach rdf:type owl:Class ;
+       rdfs:subClassOf :Place .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Bird
+:Bird rdf:type owl:Class ;
+      rdfs:subClassOf :Animal .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Birthday
+:Birthday rdf:type owl:Class ;
+          rdfs:subClassOf :Reason ;
+          owl:disjointWith :Funeral .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Cat
+:Cat rdf:type owl:Class ;
+     rdfs:subClassOf :Animal ;
+     rdfs:label :Cat .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Christmas
+:Christmas rdf:type owl:Class ;
+           rdfs:subClassOf :Reason .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#City
+:City rdf:type owl:Class ;
+      rdfs:subClassOf :Place .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Depiction
+:Depiction rdf:type owl:Class ;
+           rdfs:label "Depiction" .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Dog
+:Dog rdf:type owl:Class ;
+     rdfs:subClassOf :Animal ;
+     rdfs:label "Chien"@fr ,
+                "Dog" .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Eagle
+:Eagle rdf:type owl:Class ;
+       rdfs:subClassOf :Bird .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Female
+:Female rdf:type owl:Class ;
+        rdfs:subClassOf :Person .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Fontain
+:Fontain rdf:type owl:Class ;
+         rdfs:subClassOf :Place .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Funeral
+:Funeral rdf:type owl:Class ;
+         rdfs:subClassOf :Reason .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Kitten
+:Kitten rdf:type owl:Class ;
+        rdfs:subClassOf :Cat ;
+        owl:disjointWith :Puppy .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Lake
+:Lake rdf:type owl:Class ;
+      rdfs:subClassOf :Place .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Lion
+:Lion rdf:type owl:Class ;
+      rdfs:subClassOf :Animal .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Male
+:Male rdf:type owl:Class ;
+      rdfs:subClassOf :Person .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Marais
+:Marais rdf:type owl:Class ;
+        rdfs:subClassOf :Place .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Market
+:Market rdf:type owl:Class ;
+        rdfs:subClassOf :Place .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Montain
+:Montain rdf:type owl:Class ;
+         rdfs:subClassOf :Place .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Mountain
+:Mountain rdf:type owl:Class ;
+          rdfs:subClassOf :Place .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Neighborhood
+:Neighborhood rdf:type owl:Class ;
+              rdfs:subClassOf :Place .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#NewYears
+:NewYears rdf:type owl:Class ;
+          rdfs:subClassOf :Reason .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Parrot
+:Parrot rdf:type owl:Class ;
+        rdfs:subClassOf :Bird .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Person
+:Person rdf:type owl:Class ;
+        owl:equivalentClass [ rdf:type owl:Class ;
+                              owl:unionOf ( :Female
+                                            :Male
+                                          )
+                            ] ;
+        rdfs:subClassOf :Depiction ;
+        owl:disjointWith :Place ;
+        rdfs:label "Person" .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Photo
+:Photo rdf:type owl:Class ;
+       rdfs:label "Photo" .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Pigeon
+:Pigeon rdf:type owl:Class ;
+        rdfs:subClassOf :Bird .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Place
+:Place rdf:type owl:Class ;
+       rdfs:subClassOf :Depiction ;
+       rdfs:label "Place" .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Puppy
+:Puppy rdf:type owl:Class ;
+       rdfs:subClassOf :Dog .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Reason
+:Reason rdf:type owl:Class ;
+        rdfs:subClassOf :Depiction .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#River
+:River rdf:type owl:Class ;
+       rdfs:subClassOf :Place .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Shop
+:Shop rdf:type owl:Class ;
+      rdfs:subClassOf :Place .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#ShoppingCenter
+:ShoppingCenter rdf:type owl:Class ;
+                rdfs:subClassOf :Place .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#State
+:State rdf:type owl:Class ;
+       rdfs:subClassOf :Place .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Supermarket
+:Supermarket rdf:type owl:Class ;
+             rdfs:subClassOf :Place .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Valley
+:Valley rdf:type owl:Class ;
+        rdfs:subClassOf :Place .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Village
+:Village rdf:type owl:Class ;
+         rdfs:subClassOf :Place .
+
+
+###  http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#Zebra
+:Zebra rdf:type owl:Class ;
+       rdfs:subClassOf :Animal .
+
+
+#################################################################
+#    General axioms
+#################################################################
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :Beach
+                :City
+                :Fontain
+                :Lake
+                :Marais
+                :Market
+                :Montain
+                :Neighborhood
+                :River
+                :Shop
+                :ShoppingCenter
+                :State
+                :Supermarket
+                :Valley
+                :Village
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :Bird
+                :Cat
+                :Dog
+                :Lion
+                :Zebra
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :Eagle
+                :Parrot
+                :Pigeon
+              )
+] .
+
+
+###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi
