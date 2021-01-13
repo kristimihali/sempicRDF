@@ -204,14 +204,24 @@ PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
 SELECT DISTINCT ?p  
 WHERE {
-	?p a sempic:Photo ;
-           sempic:who sempic:Manuel ;
-	   sempic:who sempic:Jerome .
-	sempic:Manuel rdfs:label "Manuel Atencia".
-	sempic:Jerome rdfs:label "Jerome David".
+     ?p a sempic:Photo ;
+     sempic:who ?manuel ;
+     sempic:who ?jerome .
+     ?manuel rdfs:label "Manuel Atencia".
+     ?jerome rdfs:label "Jerome David".
 }
 ```
-
+Alternative solution 
+```
+SELECT DISTINCT ?p  
+WHERE {
+	?p a sempic:Photo ;
+           sempic:who ?manuel ;
+	   sempic:who ?jerome .
+          ?manuel rdfs:label "Manuel Atencia".
+	?jerome rdfs:label "Jerome David".
+}
+```
 ### Select all pictures about House warming parties
 ```
 PREFIX sempic: <http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#>
@@ -236,10 +246,22 @@ PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 SELECT DISTINCT ?p  
 WHERE {
 	?p a sempic:Photo ;
-      sempic:who ?manuel ;
-	   sempic:who ?jerome .
-    ?manuel rdfs:label "Manuel Atencia".
-	?jerome rdfs:label "Jerome David".
+  	sempic:who sempic:Manuel;
+		sempic:what sempic:HouseWarming .
+	  sempic:Manuel rdfs:label "Manuel Atencia".
+}
+```
+Alternative solution
+
+```
+PREFIX sempic: <http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#>
+
+SELECT DISTINCT ?p  
+WHERE {
+	?p a sempic:Photo ;
+  		sempic:who ?manuel;
+		sempic:what sempic:HouseWarming .
+	?manuel rdfs:label "Manuel Atencia".
 }
 ```
 
@@ -250,7 +272,9 @@ PREFIX sempic: <http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/> 
 SELECT DISTINCT ?p  
 WHERE {
-	?p a sempic:Photo ;sempic:who ?who .?who a sempic:Person .
+	?p a	sempic:Photo ;
+		sempic:who ?who .
+	?who a  sempic:Person .
 }
 ```
 
@@ -303,7 +327,7 @@ PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 
 SELECT DISTINCT ?p  
 WHERE {
-	?p a ns:Picture ;
+	?p a sempic:Photo ;
 	dc:date ?d .
 	bind(strdt(?d, xsd:date) as ?date)
 	Filter(year(?date) = 2017 && (month(?date) = 06 || month(?date) = 07 || month(?date) = 08 || month(?date) = 09 ))}
