@@ -134,7 +134,7 @@ PREFIX sempic: <http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#>
 SELECT DISTINCT ?p  
 WHERE {
 	?p a sempic:Photo ;
-  		sempic:who ns:Manuel;
+  		sempic:who sempic:Manuel;
 		sempic:what sempic:HouseWarming .
 	sempic:Manuel rdfs:label "Manuel Atencia".
 }
@@ -152,7 +152,8 @@ WHERE {
 ```
 
 ### Select all pictures without a person
-```PREFIX sempic: <http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#>
+```
+PREFIX sempic: <http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#>
 SELECT DISTINCT ?p  
 WHERE {
   ?who a sempic:Person .
@@ -197,7 +198,7 @@ PREFIX sempic: <http://miashs.univ-grenoble-alpes.fr/ontologies/sempic.owl#>
 
 SELECT DISTINCT ?p  
 WHERE {
-	?p a ns:Picture ;
+	?p a sempic:Photo ;
 	dc:date ?d .
 	bind(strdt(?d, xsd:date) as ?date)
 	Filter(year(?date) = 2017 && (month(?date) = 06 || month(?date) = 07 || month(?date) = 08 || month(?date) = 09 ))}
